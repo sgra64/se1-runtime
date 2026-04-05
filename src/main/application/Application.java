@@ -1,7 +1,5 @@
 package application;
 
-import java.util.Arrays;
-
 /**
  * Application class with a {@code main()} - function that parses command line
  * arguments.
@@ -16,12 +14,16 @@ public class Application {
      * @param args arguments passed from the command line
      */
     public static void main(String[] args) {
-        var module = Application.class.getModule().getName();
-        var greeting = String.format(module==null? "%s, se1-play" : "%s, %s (modular)", "Hello", module);
-        System.out.println(greeting);
+        // var module = Application.class.getModule().getName();
+        // var greeting = String.format(module==null? "%s, se1-play" : "%s, %s (modular)", "Hello", module);
+        // System.out.println(greeting);
 
-        Arrays.stream(args)
-            .map(arg -> String.format(" - arg: %s", arg))
-            .forEach(System.out::println);
+        // java.util.Arrays.stream(args)
+        //     .map(arg -> String.format(" - arg: %s", arg))
+        //     .forEach(System.out::println);
+        // 
+        // var driver = new tableformatter.Driver();
+        var driver = new tableformatter.Driver_222();
+        driver.run(args);
     }
 }

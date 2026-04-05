@@ -16,7 +16,7 @@
  * @version <code style=color:green>{@value application.package_info#Version}</code>
  * @author <code style=color:blue>{@value application.package_info#Author}</code>
  */
-module se1_play {
+module runtime {
 
     /*
      * Make package {@code application} accessible to other modules at compile
@@ -30,5 +30,5 @@ module se1_play {
     /*
      * External module required by this module (JUnit-5 module for JUnit testing).
      */
-    // requires org.junit.jupiter.api;
+    requires org.junit.jupiter.api;
 }
