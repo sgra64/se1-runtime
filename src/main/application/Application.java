@@ -1,27 +1,19 @@
 package application;
 
-import java.util.Arrays;
+import runtime.SE1_Runtime;
+import runtime.Runner;
+import runtime.Runner.Accessors;
 
-/**
- * Application class with a {@code main()} - function that parses command line
- * arguments.
- *
- * @version <code style=color:green>{@value application.package_info#Version}</code>
- * @author <code style=color:blue>{@value application.package_info#Author}</code>
- */
-public class Application {
 
-    /**
-     * {@code main()} - function as entry point for the Java VM.
-     * @param args arguments passed from the command line
-     */
+@Accessors(priority=0)
+public class Application implements Runner {
+
     public static void main(String[] args) {
-        var module = Application.class.getModule().getName();
-        var greeting = String.format(module==null? "%s, se1-play" : "%s, %s (modular)", "Hello", module);
-        System.out.println(greeting);
+        SE1_Runtime.getInstance().startup(args);
+    }
 
-        Arrays.stream(args)
-            .map(arg -> String.format(" - arg: %s", arg))
-            .forEach(System.out::println);
+    @Override
+    public void run(String[] args) {
+        System.out.println(String.format("Hello, %s!", this.getClass().getSimpleName()));
     }
 }
