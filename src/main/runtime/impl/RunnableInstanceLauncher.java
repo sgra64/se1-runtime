@@ -1,0 +1,62 @@
+package runtime.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+
+import runtime.Runner;
+
+
+class RunnableInstanceLauncher {
+
+    private final static runtime.Logger log = runtime.Logger.getLogger(RuntimeSystem.LoggerName);
+    private final Properties properties;
+    private final List<Runner> runnableInstances;
+
+
+    RunnableInstanceLauncher(Properties properties, List<Runner> runnableInstances) {
+        this.properties = properties;
+        this.runnableInstances = runnableInstances;
+    }
+
+    void launch(String[] args) {
+        // 
+        String p1 = Optional.ofNullable(System.getProperty("user.dir")).map(p -> p.replaceAll("\\\\", "/")).orElse("never");
+        p1 = p1.substring(0, Math.min(10, p1.length()));    // for path comparison at (***)
+        // 
+        // step 4: collect args[] passed from command line in 'argsL'
+        List<String> argsL = new ArrayList<>();
+        for(int i=0; args != null && i < args.length; i++) {
+            String arg = args[i];
+            // 
+            // (***) VSCode CodeRunner injects open file as first arg with full path, skip this arg at position 0
+            String p2 = arg.replaceAll("\\\\", "/");
+            if(i==0 && (p2.startsWith(p1) || p2.contains("code-runner-#1-Code"))) {
+                log.warn(String.format("%s: removed arg[0] (likely injected by VSCode Runner): [%s]", this.getClass().getSimpleName(), arg));
+            } else {
+                argsL.add(arg);
+            }
+        }
+        // step 5: invoke the {@code run(String[] args)} method on created runnable instances
+        for(var runnable : runnableInstances) {
+            // 
+            // combine commandLineArgs and propertyArgs and invoke runnable's run() method
+            if(Runner.class.isAssignableFrom(runnable.getClass())) {
+                // 
+                // collect args[] from property 'classname.args'
+                String propertyArgs = properties.getProperty(runnable.getClass().getCanonicalName() + ".args", "");
+                propertyArgs = propertyArgs.length() > 0? propertyArgs : properties.getProperty(runnable.getClass().getSimpleName() + ".args", "");
+                if(argsL.size()==0) {
+                    // use args[] either from command line (priority) or from application.properties
+                    argsL.add(propertyArgs);
+                }
+                log.trace(String.format("%s: launching %s.run() for runnable: '%s' with args: [%s]", this.getClass().getSimpleName(),
+                            runnable.getClass().getSimpleName(), runnable.getClass().getSimpleName(), argsL));
+                // 
+                runnable.run(argsL.toArray(new String[argsL.size()]));
+            }
+        }
+        LoggerImpl.flushAppenders();
+    }
+}
