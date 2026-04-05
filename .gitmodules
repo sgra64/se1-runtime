@@ -1,0 +1,6 @@
+[submodule ".env"]
+	path = .env
+	url = https://github.com/sgra64/gitmodule-env.sh.git
+[submodule ".vscode"]
+	path = .vscode
+	url = https://github.com/sgra64/gitmodule-vscode-java.git
