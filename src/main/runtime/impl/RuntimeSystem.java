@@ -10,7 +10,12 @@ import runtime.Logger;
 import runtime.SE1_Runtime;
 import runtime.Runner;
 
-
+/**
+ * Class {@link RuntimeSystem} provides the access point to non-public
+ * implementation classes of the package {@code runtime.impl}.
+ * @version <code style=color:green>{@value runtime.package_info#Version}</code>
+ * @author <code style=color:blue>{@value runtime.package_info#Author}</code>
+ */
 public final class RuntimeSystem implements SE1_Runtime {
 
     protected final static String LoggerName = "Runtime";
@@ -40,6 +45,11 @@ public final class RuntimeSystem implements SE1_Runtime {
         log.info(String.format("%s, singleton instance created", this.getClass().getSimpleName()));
     }
 
+    /**
+     * Return the singleton instance of the runtime system. Create the instance
+     * when it does not yet exist (lazy initialization).
+     * @return the singleton instance of the runtime system.
+     */
     public static RuntimeSystem getInstance() {
         return Optional.ofNullable(runtimeSystem).orElseGet(() -> runtimeSystem = new RuntimeSystem());
     }
@@ -51,17 +61,27 @@ public final class RuntimeSystem implements SE1_Runtime {
      */
     public static Logger getLogger(String name) { return LoggerImpl.getLogger(name); }
 
-
-    public List<CommandRunnerInstance> createCommandRunnerInstances(CommandRunner runnable, String commands, String[] args) {
-        return CommandRunnerImpl.getInstance().create(new ArrayList<>(), runnable, commands, args);
+    /**
+     * Create command runner instances for the given command runner, commands and command line arguments.
+     * @param runner the command runner instance on which the command run is performed.
+     * @param commands comma-separated words to split {@code args[]}.
+     * @param args raw command line arguments to split and convert into key-value
+     * arguments for each command.
+     * @return list of command runner instances.
+     */
+    public List<CommandRunnerInstance> createCommandRunnerInstances(CommandRunner runner, String commands, String[] args) {
+        return CommandRunnerImpl.getInstance().create(new ArrayList<>(), runner, commands, args);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Logger logger() { return log; }
 
+    /** {@inheritDoc} */
     @Override
     public PropertiesImpl properties() { return properties; }
 
+    /** {@inheritDoc} */
     @Override
     public SE1_Runtime startup(String[] args) {
         log.trace(String.format("%s: startup(String[] args) called", this.getClass().getSimpleName()));

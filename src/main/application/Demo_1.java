@@ -7,7 +7,17 @@ import runtime.CommandRunner;
 import runtime.Runner;
 import runtime.Runner.Accessors;
 
-
+/**
+ * Class {@link Demo_1} is a demo application that implements the interfaces
+ * {@link Runner} and {@link CommandRunner} to demonstrate the runtime system.
+ * <p>
+ * Method {@code run(String[] args)} is the entry point of the application.
+ * The {@code run(String command, KVArgs kvargs)} method is called by the
+ * {@link CommandRunner} utility for each command found in the command line
+ * arguments.
+ * @version <code style=color:green>{@value runtime.package_info#Version}</code>
+ * @author <code style=color:blue>{@value runtime.package_info#Author}</code>
+ */
 @Accessors(priority=1)
 public class Demo_1 implements Runner, CommandRunner {
 
@@ -20,6 +30,7 @@ public class Demo_1 implements Runner, CommandRunner {
     //     private int z;
     // }
 
+    /** {@inheritDoc} */
     @Override
     public void run(String[] args) {
         // 
@@ -34,6 +45,7 @@ public class Demo_1 implements Runner, CommandRunner {
         CommandRunner.run(this, "sum, findFirst, yellow, green, red", args);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(String command, KVArgs kvargs) {
         // 

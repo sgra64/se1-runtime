@@ -1,26 +1,18 @@
 /**
- * The {@link runtime} package includes classes with a {@code main()} -
- * function executable by the Java VM.
- *
- * @version <code style=color:green>{@value runtime.package_info#Version}</code>
- * @author <code style=color:blue>{@value runtime.package_info#Author}</code>
+ * The {@link runtime} package declares public interfaces of the
+ * {@code runtime} module.
  */
 package runtime;
 
-
 /**
- * Class {@code package_info} of the {@link runtime} package provides global
- * variables used in <i>Javadoc</i>.
- *
- * File {@code package-info.java} has been introduced with <i>Modules</i>
- * in Java 9 (2017) to provide package-level documentation.
+ * Class {@code package_info} provides global <i>Javadoc</i> variables.
  */
 class package_info {
 
     /**
      * Author attribute to appear in javadoc.
      */
-    static final String Author = "sgraupner";           // <-- adjust with your name
+    static final String Author = "sgraupner";
 
     /**
      * Version attribute to appear in javadoc.
