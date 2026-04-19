@@ -1,8 +1,8 @@
 /**
- * The {@link runtime} package declares public interfaces of the
+ * The {@link runtimeSE} package declares public interfaces of the
  * {@code runtime} module.
  */
-package runtime;
+package runtimeSE;
 
 /**
  * Class {@code package_info} provides global <i>Javadoc</i> variables.

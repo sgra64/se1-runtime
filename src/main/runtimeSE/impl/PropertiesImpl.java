@@ -1,4 +1,4 @@
-package runtime.impl;
+package runtimeSE.impl;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -15,7 +15,7 @@ import java.util.zip.ZipInputStream;
 
 class PropertiesImpl extends java.util.Properties {
 
-    private static final runtime.Logger log = runtime.Logger.getLogger(RuntimeSystem.LoggerName);
+    private static final runtimeSE.Logger log = runtimeSE.Logger.getLogger(RuntimeSE_Impl.LoggerName);
 
     public static final String PROPERTIES_FILE = "application.properties";
 

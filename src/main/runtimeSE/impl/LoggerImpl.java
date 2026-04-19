@@ -1,4 +1,4 @@
-package runtime.impl;
+package runtimeSE.impl;
 
 import java.util.Map;
 import java.util.Optional;
@@ -20,13 +20,13 @@ import java.util.HashMap;
 import java.util.List;
 
 
-class LoggerImpl implements runtime.Logger {
+class LoggerImpl implements runtimeSE.Logger {
     private static final String[] levels = new String[] { "ALL", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL", "OFF" };
     private static final DateTimeFormatter fmtDateTime = DateTimeFormatter.ofPattern("yyyy-MMdd HH:mm:ss:SSS");
     private static final Map<String, LoggerImpl> loggers = new HashMap<>();
     private static final Map<String, Appender> appenders = new HashMap<>();
     static {
-        loggers.put(RuntimeSystem.LoggerName, new LoggerImpl(RuntimeSystem.LoggerName));
+        loggers.put(RuntimeSE_Impl.LoggerName, new LoggerImpl(RuntimeSE_Impl.LoggerName));
         appenders.put("Console", new ConsoleAppender("Console"));
     }
 
@@ -46,8 +46,8 @@ class LoggerImpl implements runtime.Logger {
      * @param name logger name
      * @return named logger
      */
-    public static runtime.Logger getLogger(String name) {
-        return Optional.ofNullable(loggers.get(name==null || name.length()==0? RuntimeSystem.LoggerName : name))
+    public static runtimeSE.Logger getLogger(String name) {
+        return Optional.ofNullable(loggers.get(name==null || name.length()==0? RuntimeSE_Impl.LoggerName : name))
             .orElseGet(() -> { LoggerImpl log; loggers.put(name, log = new LoggerImpl(name)); return log; });
     }
 

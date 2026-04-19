@@ -1,4 +1,4 @@
-package runtime.impl;
+package runtimeSE.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,15 +7,15 @@ import java.util.Optional;
 import java.util.Stack;
 import java.util.stream.IntStream;
 
-import runtime.CommandRunner;
-import runtime.CommandRunner.CommandRunnerInstance;
-import runtime.Logger;
-import runtime.impl.KVArgsImpl.KVPair;
+import runtimeSE.CommandRunner;
+import runtimeSE.Logger;
+import runtimeSE.CommandRunner.CommandRunnerInstance;
+import runtimeSE.impl.KVArgsImpl.KVPair;
 
 
 class CommandRunnerImpl {
     private static CommandRunnerImpl instance = null;
-    private final static Logger log = Logger.getLogger(RuntimeSystem.LoggerName);
+    private final static Logger log = Logger.getLogger(RuntimeSE_Impl.LoggerName);
     private Stack<String> tokens = new Stack<>();
     private List<KVPair> params = new ArrayList<>();
     private final StringBuilder sb = new StringBuilder();
@@ -26,11 +26,14 @@ class CommandRunnerImpl {
         return Optional.ofNullable(instance).orElseGet(() -> instance = new CommandRunnerImpl());
     }
 
-    List<CommandRunnerInstance> create(List<CommandRunnerInstance> cri, CommandRunner runnable, String commands, String[] args) {
+    List<CommandRunnerInstance> create(List<CommandRunnerInstance> cri, CommandRunner runnable, String commands, String args) {
         cri = cri==null? new ArrayList<>() : cri;
         String[] splitArgs = commands==null? new String[] { } : commands.split(",");
-        for(String arg : args) {
-            sb.append(arg).append(" ");
+        // for(String arg : args) {
+        //     sb.append(arg).append(" ");
+        // }
+        if(args != null) {
+            sb.append(args);
         }
         // 
         log.trace(String.format("%s: found splitting commands: '%s'", this.getClass().getSimpleName(), Arrays.toString(splitArgs)));

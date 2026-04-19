@@ -1,4 +1,4 @@
-package runtime.impl;
+package runtimeSE.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,7 +18,7 @@ import java.util.zip.ZipInputStream;
 
 class ClassScanner {
 
-    private final runtime.Logger log = runtime.Logger.getLogger(RuntimeSystem.LoggerName);
+    private final runtimeSE.Logger log = runtimeSE.Logger.getLogger(RuntimeSE_Impl.LoggerName);
 
     private final Function<String, String> classPathMapper = (cls) -> cls
         .replaceAll("\\\\", "/")        // backslashes (Windows) to '/' (Unix)

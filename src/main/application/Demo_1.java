@@ -3,9 +3,10 @@ package application;
 import java.util.Arrays;
 import java.util.List;
 
-import runtime.CommandRunner;
-import runtime.Runner;
-import runtime.Runner.Accessors;
+import runtimeSE.CommandRunner;
+import runtimeSE.Runner;
+import runtimeSE.Runner.Accessors;
+import runtimeSE.RuntimeSE;
 
 /**
  * Class {@link Demo_1} is a demo application that implements the interfaces
@@ -15,8 +16,8 @@ import runtime.Runner.Accessors;
  * The {@code run(String command, KVArgs kvargs)} method is called by the
  * {@link CommandRunner} utility for each command found in the command line
  * arguments.
- * @version <code style=color:green>{@value runtime.package_info#Version}</code>
- * @author <code style=color:blue>{@value runtime.package_info#Author}</code>
+ * @version <code style=color:green>{@value runtimeSE.package_info#Version}</code>
+ * @author <code style=color:blue>{@value runtimeSE.package_info#Author}</code>
  */
 @Accessors(priority=1)
 public class Demo_1 implements Runner, CommandRunner {
@@ -32,7 +33,7 @@ public class Demo_1 implements Runner, CommandRunner {
 
     /** {@inheritDoc} */
     @Override
-    public void run(String[] args) {
+    public void run(RuntimeSE runtime, String[] args) {
         // 
         System.out.println(String.format("Hello, %s! -- args: %s", this.getClass().getSimpleName(),
             Arrays.stream(args)
@@ -42,12 +43,12 @@ public class Demo_1 implements Runner, CommandRunner {
         // for(var cri : CommandRunner.create(this, "sum, findFirst, yellow, green, red", args)) {
         //     this.run(cri.cmd(), cri.kvargs());
         // }
-        CommandRunner.run(this, "sum, findFirst, yellow, green, red", args);
+        CommandRunner.run(this, "sum, findFirst, yellow, green, red", String.join(" ", args));
     }
 
     /** {@inheritDoc} */
     @Override
-    public void run(String command, KVArgs kvargs) {
+    public void run(RuntimeSE runtime, String command, KVArgs kvargs) {
         // 
         System.out.println(String.format(" --> '%s' -- args: %s", command, kvargs));
         // 

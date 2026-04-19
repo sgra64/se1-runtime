@@ -1,11 +1,11 @@
-package runtime.impl;
+package runtimeSE.impl;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import runtime.CommandRunner.KVArgs;
-import runtime.Logger;
+import runtimeSE.Logger;
+import runtimeSE.CommandRunner.KVArgs;
 
 
 class KVArgsImpl implements KVArgs {
@@ -17,16 +17,13 @@ class KVArgsImpl implements KVArgs {
         }
     }
 
-    private final static Logger log = Logger.getLogger(RuntimeSystem.LoggerName);
+    private final static Logger log = Logger.getLogger(RuntimeSE_Impl.LoggerName);
 
-    private final List<KVPair> args;    // maintain args order
-    // private final java.util.Map<String, KVPair> kvMap;    // fast lookup
+    private final List<KVPair> kvpairs;    // maintain args order
 
 
-    KVArgsImpl(List<KVPair> args) {
-        this.args = args==null? List.of() : args;
-        // this.kvMap = args==null? java.util.Map.of() :
-        //     args.stream().collect(java.util.stream.Collectors.toMap(kvp -> kvp.key(), v -> v));
+    KVArgsImpl(List<KVPair> kvpairs) {
+        this.kvpairs = kvpairs==null? List.of() : kvpairs;
     }
 
     @Override
@@ -85,14 +82,19 @@ class KVArgsImpl implements KVArgs {
     public boolean hasKey(String key) { return findKey(key).isPresent(); }
 
     @Override
+    public List<String> keys() {
+        return kvpairs.stream().map(kv -> kv.key()).toList();
+    }
+
+    @Override
     public String toString() {
-        return args.stream()
+        return kvpairs.stream()
             .map(kv -> String.format("%s='%s'", kv.key(), kv.value()))
-            .reduce("", (a, b) -> String.format("%s%s %s", a, a.length()==0? "" : ", ", b));
+            .reduce("", (a, b) -> String.format("%s%s%s", a, a.length()==0? "" : ", ", b));
     }
 
     private Optional<KVPair> findKey(String key) {
-        var k = args.stream().filter(kvp -> kvp.key().equalsIgnoreCase(key)).findFirst();
+        var k = kvpairs.stream().filter(kvp -> kvp.key().equalsIgnoreCase(key)).findFirst();
         if( ! k.isPresent()) {
             log.warn(String.format("key '%s' is not present in command line arguments", key));
         }

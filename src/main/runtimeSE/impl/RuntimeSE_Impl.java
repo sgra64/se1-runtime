@@ -1,28 +1,28 @@
-package runtime.impl;
+package runtimeSE.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import runtime.CommandRunner;
-import runtime.CommandRunner.CommandRunnerInstance;
-import runtime.Logger;
-import runtime.SE1_Runtime;
-import runtime.Runner;
+import runtimeSE.CommandRunner;
+import runtimeSE.Logger;
+import runtimeSE.Runner;
+import runtimeSE.RuntimeSE;
+import runtimeSE.CommandRunner.CommandRunnerInstance;
 
 /**
- * Class {@link RuntimeSystem} provides the access point to non-public
+ * Class {@link RuntimeSE_Impl} provides the access point to non-public
  * implementation classes of the package {@code runtime.impl}.
- * @version <code style=color:green>{@value runtime.package_info#Version}</code>
- * @author <code style=color:blue>{@value runtime.package_info#Author}</code>
+ * @version <code style=color:green>{@value runtimeSE.package_info#Version}</code>
+ * @author <code style=color:blue>{@value runtimeSE.package_info#Author}</code>
  */
-public final class RuntimeSystem implements SE1_Runtime {
+public final class RuntimeSE_Impl implements RuntimeSE {
 
     protected final static String LoggerName = "Runtime";
 
     private final static Logger log = Logger.getLogger(LoggerName);
 
-    private static RuntimeSystem runtimeSystem = null;
+    private static RuntimeSE_Impl runtimeSystem = null;
 
     private RuntimeBuilder runtimeBuilder = null;
 
@@ -40,7 +40,7 @@ public final class RuntimeSystem implements SE1_Runtime {
     private final List<Runner> runnableInstances = new ArrayList<>();
     private final PropertiesImpl properties = new PropertiesImpl();
 
-    private RuntimeSystem() {
+    private RuntimeSE_Impl() {
         log.info(String.format("Running on Java %s", System.getProperty("java.version")));
         log.info(String.format("%s, singleton instance created", this.getClass().getSimpleName()));
     }
@@ -50,8 +50,8 @@ public final class RuntimeSystem implements SE1_Runtime {
      * when it does not yet exist (lazy initialization).
      * @return the singleton instance of the runtime system.
      */
-    public static RuntimeSystem getInstance() {
-        return Optional.ofNullable(runtimeSystem).orElseGet(() -> runtimeSystem = new RuntimeSystem());
+    public static RuntimeSE_Impl getInstance() {
+        return Optional.ofNullable(runtimeSystem).orElseGet(() -> runtimeSystem = new RuntimeSE_Impl());
     }
 
     /**
@@ -69,7 +69,7 @@ public final class RuntimeSystem implements SE1_Runtime {
      * arguments for each command.
      * @return list of command runner instances.
      */
-    public List<CommandRunnerInstance> createCommandRunnerInstances(CommandRunner runner, String commands, String[] args) {
+    public List<CommandRunnerInstance> createCommandRunnerInstances(CommandRunner runner, String commands, String args) {
         return CommandRunnerImpl.getInstance().create(new ArrayList<>(), runner, commands, args);
     }
 
@@ -83,7 +83,7 @@ public final class RuntimeSystem implements SE1_Runtime {
 
     /** {@inheritDoc} */
     @Override
-    public SE1_Runtime startup(String[] args) {
+    public RuntimeSE startup(String[] args) {
         log.trace(String.format("%s: startup(String[] args) called", this.getClass().getSimpleName()));
         if(runtimeBuilder==null) {
             runtimeBuilder = new RuntimeBuilder();
@@ -93,5 +93,22 @@ public final class RuntimeSystem implements SE1_Runtime {
             runnableInstanceLauncher.launch(args);
         }
         return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String pickArgs(String key, String[] args) {
+        String pargs = "";
+        if(args == null || (args.length > 0 && args[0].isEmpty())) {
+            logger().info("args[] null or empty, using args[] from 'numbers.args' property");
+            pargs = Optional.ofNullable((String) properties().get("numbers.args")).orElseGet(() -> {
+                logger().warn(String.format("%s: no property 'numbers.args' found, using empty args", this.getClass().getSimpleName()));
+                return "";
+            });
+        } else {
+            pargs = String.join(" ", args);
+            logger().info(String.format("using args[] from command line: %s", pargs));
+        }
+        return pargs;
     }
 }

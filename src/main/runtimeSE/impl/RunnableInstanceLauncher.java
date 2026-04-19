@@ -1,16 +1,17 @@
-package runtime.impl;
+package runtimeSE.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import runtime.Runner;
+import runtimeSE.Runner;
+import runtimeSE.RuntimeSE;
 
 
 class RunnableInstanceLauncher {
 
-    private final static runtime.Logger log = runtime.Logger.getLogger(RuntimeSystem.LoggerName);
+    private final static runtimeSE.Logger log = runtimeSE.Logger.getLogger(RuntimeSE_Impl.LoggerName);
     private final Properties properties;
     private final List<Runner> runnableInstances;
 
@@ -54,7 +55,7 @@ class RunnableInstanceLauncher {
                 log.trace(String.format("%s: launching %s.run() for runnable: '%s' with args: [%s]", this.getClass().getSimpleName(),
                             runnable.getClass().getSimpleName(), runnable.getClass().getSimpleName(), argsL));
                 // 
-                runnable.run(argsL.toArray(new String[argsL.size()]));
+                runnable.run(RuntimeSE.getInstance(), argsL.toArray(new String[argsL.size()]));
             }
         }
         LoggerImpl.flushAppenders();

@@ -1,21 +1,21 @@
-package runtime;
+package runtimeSE;
 
 import java.util.Properties;
 
 /**
- * Interface {@link SE1_Runtime} defines the public API of the {@link runtime}
+ * Interface {@link RuntimeSE} defines the public API of the {@link runtimeSE}
  * module.
- * @version <code style=color:green>{@value runtime.package_info#Version}</code>
- * @author <code style=color:blue>{@value runtime.package_info#Author}</code>
+ * @version <code style=color:green>{@value runtimeSE.package_info#Version}</code>
+ * @author <code style=color:blue>{@value runtimeSE.package_info#Author}</code>
  */
-public interface SE1_Runtime {
+public interface RuntimeSE {
 
     /**
-     * Return the singleton instance of the {@link SE1_Runtime} implementation.
+     * Return the singleton instance of the {@link RuntimeSE} implementation.
      * @return
      */
-    static SE1_Runtime getInstance() {
-        return runtime.impl.RuntimeSystem.getInstance();
+    static RuntimeSE getInstance() {
+        return runtimeSE.impl.RuntimeSE_Impl.getInstance();
     }
 
     /**
@@ -26,7 +26,16 @@ public interface SE1_Runtime {
      * @param args command line arguments passed to the application.
      * @return chainable self-reference to the runtime instance.
      */
-    SE1_Runtime startup(String[] args);
+    RuntimeSE startup(String[] args);
+
+    /**
+     * Select {@code String[] args} from command line (preferred)  or from key
+     * in 'application.properties', if no command line arguments are given.
+     * Method flattens arguments to a single String.
+     * @param args command line arguments.
+     * @return arguments flattened to a single String.
+     */
+    String pickArgs(String key, String[] args);
 
     /**
      * Return {@link Properties} loaded from the {@code application.properties}

@@ -1,16 +1,16 @@
-package runtime.impl;
+package runtimeSE.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import runtime.Runner;
+import runtimeSE.Runner;
 
 
 class RunnableInstanceFactory {
 
-    private static final runtime.Logger log = runtime.Logger.getLogger(RuntimeSystem.LoggerName);
+    private static final runtimeSE.Logger log = runtimeSE.Logger.getLogger(RuntimeSE_Impl.LoggerName);
 
     private static RunnableInstanceFactory instance = new RunnableInstanceFactory();
 

@@ -1,14 +1,14 @@
-package runtime.impl;
+package runtimeSE.impl;
 
 import java.util.List;
 import java.util.Optional;
 
-import runtime.Runner;
+import runtimeSE.Runner;
 
 
 class RuntimeBuilder {
 
-    private final static runtime.Logger log = runtime.Logger.getLogger(RuntimeSystem.LoggerName);
+    private final static runtimeSE.Logger log = runtimeSE.Logger.getLogger(RuntimeSE_Impl.LoggerName);
 
     private final static String banner = 
         // https://patorjk.com/software/taag/#p=display&f=Small+Slant&t=Run+Time++1+.0

@@ -1,4 +1,4 @@
-package runtime;
+package runtimeSE;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import java.util.List;
  * <a href="https://spring.io/projects/spring-boot"><i>Spring Boot's</i></a>
  * <a href="https://github.com/spring-projects/spring-boot/blob/main/core/spring-boot/src/main/java/org/springframework/boot/CommandLineRunner.java">
  *      <i>CommandLineRunner.java</i></a> interface.
- * @version <code style=color:green>{@value runtime.package_info#Version}</code>
- * @author <code style=color:blue>{@value runtime.package_info#Author}</code>
+ * @version <code style=color:green>{@value runtimeSE.package_info#Version}</code>
+ * @author <code style=color:blue>{@value runtimeSE.package_info#Author}</code>
  */
 public interface CommandRunner {
 
@@ -40,7 +40,7 @@ public interface CommandRunner {
         /**
          * Invoke the command run passing the command and key-value arguments.
          */
-        void run() { runner.run(cmd, kvargs); }
+        void run() { runner.run(RuntimeSE.getInstance(), cmd, kvargs); }
     }
 
     /**
@@ -117,6 +117,12 @@ public interface CommandRunner {
          * @return true if the key is present, false otherwise.
          */
         boolean hasKey(String key);
+
+        /**
+         * Return a list of all present keys.
+         * @return list of all present keys.
+         */
+        List<String> keys();
     }
 
     /**
@@ -129,8 +135,8 @@ public interface CommandRunner {
      * arguments for each command.
      * @return list of command runner instances.
      */
-    static List<CommandRunnerInstance> create(CommandRunner runner, String commands, String[] args) {
-        return runtime.impl.RuntimeSystem.getInstance().createCommandRunnerInstances(runner, commands, args);
+    static List<CommandRunnerInstance> create(CommandRunner runner, String commands, String args) {
+        return runtimeSE.impl.RuntimeSE_Impl.getInstance().createCommandRunnerInstances(runner, commands, args);
     }
 
     /**
@@ -140,7 +146,7 @@ public interface CommandRunner {
      * @param commands comma-separated words to split {@code args[]}.
      * @param args raw command line arguments.
      */
-    static void run(CommandRunner runner, String commands, String[] args) {
+    static void run(CommandRunner runner, String commands, String args) {
         for(var cr : create(runner, commands, args)) {
             cr.run();
         }
@@ -151,5 +157,5 @@ public interface CommandRunner {
      * @param command the command string.
      * @param args the key-value arguments for the command.
      */
-    void run(String command, KVArgs args);
+    void run(RuntimeSE runtime, String command, KVArgs args);
 }

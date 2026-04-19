@@ -1,6 +1,6 @@
-package runtime;
+package runtimeSE;
 
-import runtime.impl.RuntimeSystem;
+import runtimeSE.impl.RuntimeSE_Impl;
 
 /**
  * Interface {@link Logger} defines the API of a simple logging utility
@@ -24,8 +24,8 @@ import runtime.impl.RuntimeSystem;
  *  Possible values are {@code console} (for Console output) and names of log
  *  files.</li>
  * </ul>
- * @version <code style=color:green>{@value runtime.package_info#Version}</code>
- * @author <code style=color:blue>{@value runtime.package_info#Author}</code>
+ * @version <code style=color:green>{@value runtimeSE.package_info#Version}</code>
+ * @author <code style=color:blue>{@value runtimeSE.package_info#Author}</code>
  */
 public interface Logger {
 
@@ -36,7 +36,7 @@ public interface Logger {
      * @return  logger instance of that name.
      */
     static Logger getLogger(String name) {
-        return RuntimeSystem.getLogger(name);
+        return RuntimeSE_Impl.getLogger(name);
     }
 
     /**
