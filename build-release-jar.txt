@@ -1,0 +1,14 @@
+# build runtime-lib in package 'runtime'
+
+runtimelib="target/runtimeSE-1.0.1-RELEASE.jar"
+
+rm -rf src/main/application \
+    src/tests \
+    src/resources
+
+mk clean compile && \
+    jar -c -v -f "$runtimelib" \
+        -C target/classes . &&
+        [ -f "$runtimelib" ] &&
+          echo -e "-->\\ncreated: $runtimelib" ||
+          echo -e "-->\\nno compiled classes or manifest, no .jar created"
