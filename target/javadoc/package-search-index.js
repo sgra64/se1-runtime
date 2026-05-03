@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"runtimeSE","l":"application"},{"m":"runtimeSE","l":"runtimeSE"},{"m":"runtimeSE","l":"runtimeSE.impl"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"runtimeSE","l":"runtimeSE"},{"m":"runtimeSE","l":"runtimeSE.impl"}];updateSearchResults();
