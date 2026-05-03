@@ -94,21 +94,4 @@ public final class RuntimeSE_Impl implements RuntimeSE {
         }
         return this;
     }
-
-    /** {@inheritDoc} */
-    @Override
-    public String pickArgs(String key, String[] args) {
-        String pargs = "";
-        if(args == null || (args.length > 0 && args[0].isEmpty())) {
-            logger().info("args[] null or empty, using args[] from 'numbers.args' property");
-            pargs = Optional.ofNullable((String) properties().get("numbers.args")).orElseGet(() -> {
-                logger().warn(String.format("%s: no property 'numbers.args' found, using empty args", this.getClass().getSimpleName()));
-                return "";
-            });
-        } else {
-            pargs = String.join(" ", args);
-            logger().info(String.format("using args[] from command line: %s", pargs));
-        }
-        return pargs;
-    }
 }

@@ -1,6 +1,7 @@
 package runtimeSE.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -47,20 +48,78 @@ class RunnableInstanceLauncher {
                 // 
                 if(argsL.size()==0) {
                     // if no args have been passed from the command line, attempt to collect args[]
-                    // from full 'a.b.c.classname.args' or simple 'classname.args' property
+                    // from runnable class name + '.args' in 'application.properties', e.g. 'numbers.args'
                     // @Nullable - requires module import: 'org.jspecify'
-                    String propertyArgs = properties.getProperty(runnable.getClass().getCanonicalName() + ".args", null);
-                    propertyArgs = propertyArgs != null? propertyArgs : properties.getProperty(runnable.getClass().getSimpleName() + ".args", null);
-                    if(propertyArgs != null) {
-                        argsL.add(propertyArgs);
+                    String propertyKey = null;
+                    String propertyArgs = null;
+                    HashSet<String> keyAttempts = new HashSet<>();
+                    for(String k : List.of(
+                        runnable.getClass().getCanonicalName(),
+                        runnable.getClass().getPackageName(),   // full package name
+                        runnable.getClass().getPackageName().replaceAll(".*\\.", "")    // last name in package
+                    )) {
+                        propertyKey = k + ".args";
+                        propertyArgs = properties.getProperty(propertyKey, null);
+                        if(propertyArgs==null) {
+                            keyAttempts.add(propertyKey);
+                        } else {
+                            break;
+                        }
                     }
+                    if(propertyArgs != null) {
+                        // split single-string propertyArgs into args[] by white spaces,
+                        // except in single- or double quotes and collect in argsL list
+                        argsSplitter(argsL, propertyArgs);
+                        log.trace(String.format("%s: picked args[] from property: '%s'", this.getClass().getSimpleName(), propertyKey));
+                    } else {
+                        log.warn(String.format("%s: no property in 'application.properties' to pick-up args[] using keys: '%s'",
+                            this.getClass().getSimpleName(), keyAttempts));
+                    }
+                    keyAttempts.clear();
                 }
-                log.trace(String.format("%s: launching %s.run() for runnable: '%s' with args: [%s]", this.getClass().getSimpleName(),
+                log.trace(String.format("%s: launching %s.run() for runnable: '%s' with args: %s", this.getClass().getSimpleName(),
                             runnable.getClass().getSimpleName(), runnable.getClass().getSimpleName(), argsL));
                 // 
                 runnable.run(RuntimeSE.getInstance(), argsL.toArray(new String[argsL.size()]));
             }
         }
         LoggerImpl.flushAppenders();
+    }
+
+    /**
+     * Split single-string arg, e.g. from propertyArgs, into args[] by
+     * white spaces, but not in single- or double quotes.
+     */
+    private void argsSplitter(List<String> result, String singleStringArgs) {
+        StringBuilder sb = new StringBuilder();
+        boolean inDoubleQuotes = false, inSingleQuotes = false;
+        // 
+        for (char c : singleStringArgs.toCharArray()) {
+            if (c == '\"' && ! inSingleQuotes) inDoubleQuotes = ! inDoubleQuotes;
+            else if (c == '\'' && ! inDoubleQuotes) inSingleQuotes = ! inSingleQuotes;
+            // 
+            if (Character.isWhitespace(c) && ! inDoubleQuotes && ! inSingleQuotes) {
+                if (sb.length() > 0) {
+                    result.add(trimQuotes(sb.toString()));
+                    sb.setLength(0);
+                }
+            } else {
+                sb.append(c);
+            }
+        }
+        result.add(trimQuotes(sb.toString()));
+    }
+
+    /**
+     * Trim leading and trailing single or double quotes.
+     */
+    private String trimQuotes(String str) {
+        if (str == null || str.length() < 2) return str;
+        // 
+        if ((str.startsWith("\"") && str.endsWith("\"")) || 
+            (str.startsWith("'") && str.endsWith("'"))) {
+            return str.substring(1, str.length() - 1);
+        }
+        return str;
     }
 }

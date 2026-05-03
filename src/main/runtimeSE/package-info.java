@@ -17,5 +17,5 @@ class package_info {
     /**
      * Version attribute to appear in javadoc.
      */
-    static final String Version = "1.0.0-SNAPSHOT";
+    static final String Version = "1.0.2-SNAPSHOT";
 }

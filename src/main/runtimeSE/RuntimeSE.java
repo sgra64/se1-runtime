@@ -29,15 +29,6 @@ public interface RuntimeSE {
     RuntimeSE startup(String[] args);
 
     /**
-     * Select {@code String[] args} from command line (preferred)  or from key
-     * in 'application.properties', if no command line arguments are given.
-     * Method flattens arguments to a single String.
-     * @param args command line arguments.
-     * @return arguments flattened to a single String.
-     */
-    String pickArgs(String key, String[] args);
-
-    /**
      * Return {@link Properties} loaded from the {@code application.properties}
      * @return properties loaded from the {@code application.properties} file.
      */
